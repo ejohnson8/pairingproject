@@ -6,6 +6,9 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+import java.util.Map;
+
 @Repository
 public class EmployeeJdbcRepository {
     @Autowired
@@ -17,5 +20,7 @@ public class EmployeeJdbcRepository {
         }, new BeanPropertyRowMapper< Employee >(Employee.class));
     }
 
-
+    public List<Employee> getAllById(List<String> ids) {
+        return jdbcTemplate.query("select * from employee where employeeID in ids", new BeanPropertyRowMapper<Employee>(Employee.class));
+    }
 }

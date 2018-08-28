@@ -7,6 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
+import java.util.List;
+
 @Controller
 @RequestMapping("/employee")
 public class EmployeeController {
@@ -21,6 +24,17 @@ public class EmployeeController {
         Employee employee = repository.getById(id);
         if(employee != null) {
             return employee;
+        } else {
+            throw new ResourceNotFoundException();
+        }
+    }
+
+    @RequestMapping(value = "/{ids}", method = RequestMethod.GET)
+    @ResponseBody
+    public List<Employee> getAllEmployeesByIds(@PathVariable("ids") List<String> ids) {
+        List<Employee> employees = repository.getAllById(ids);
+        if(employees != null) {
+            return employees;
         } else {
             throw new ResourceNotFoundException();
         }

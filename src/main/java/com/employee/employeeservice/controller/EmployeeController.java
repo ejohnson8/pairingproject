@@ -1,5 +1,6 @@
 package com.employee.employeeservice.controller;
 
+import com.employee.employeeservice.database.EmployeeJdbcRepository;
 import com.employee.employeeservice.exception.ResourceNotFoundException;
 import com.employee.employeeservice.model.Employee;
 import com.employee.employeeservice.model.EmployeeList;
@@ -20,10 +21,15 @@ public class EmployeeController {
     @Autowired
     private EmployeeList employees;
 
+    @Autowired
+    private EmployeeJdbcRepository repository;
+
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     @ResponseBody
     public Employee getEmployeeById(@PathVariable("id") String id) {
-        return new Employee("Liz", "Johnson", "123", "", "" ,"" ,"");//employees.getEmployeeMap().get(id);
+       // return new Employee("Liz", "Johnson", "123", "", "" ,"" ,"");
+        // employees.getEmployeeMap().get(id);
+        return repository.getById(id);
     }
 
     @RequestMapping(value = "/mentor/{id}", method = RequestMethod.GET)

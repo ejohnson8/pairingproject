@@ -1,17 +1,16 @@
 package com.employee.employeeservice.controller;
 
 
+import com.employee.employeeservice.database.EmployeeJdbcRepository;
+import com.employee.employeeservice.exception.ResourceNotFoundException;
 import com.employee.employeeservice.model.Employee;
-import com.employee.employeeservice.model.EmployeeList;
 import com.employee.employeeservice.model.Mentor;
 import org.junit.Before;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static org.mockito.Mockito.mock;
@@ -26,15 +25,18 @@ public class EmployeeControllerTest {
     private String title;
     private String email;
     private String imageURL;
-    private Map<String, Employee> employeeList;
-    private String mentorID;
 
+
+    private Employee testEmployee;
+
+
+    EmployeeJdbcRepository mockRepository;
     EmployeeController employeeController;
 
     @Before
     public void setup(){
-        EmployeeList mockEmployeeList;
-        mockEmployeeList = mock(EmployeeList.class);
+
+        mockRepository = mock(EmployeeJdbcRepository.class);
 
         firstName = "Liz";
         lastName = "Johnson";
@@ -44,59 +46,28 @@ public class EmployeeControllerTest {
         title = "Technical Analyst";
         email = "ej@solstice.com";
         imageURL = "www.image.com";
-        mentorID = "456";
-        Employee testEmployee = new Employee(firstName, lastName, employeeID, office, title, email, imageURL);
 
-
-        employeeList = new HashMap<String, Employee>();
-        employeeList.put(employeeID, testEmployee);
-        Map<String,Employee> employeesLowestLevel = employeeList;
-        Employee testMentor = new Mentor(firstName, lastName, mentorID, office, title, email, imageURL, employeesLowestLevel);
-        employeeList.put(mentorID, testMentor);
-
-
-        when(mockEmployeeList.getEmployeeMap()).thenReturn(employeeList);
+        testEmployee = new Employee(firstName, lastName, employeeID, office, title, email, imageURL);
 
         employeeController = new EmployeeController();
-        ReflectionTestUtils.setField(employeeController, "employees", mockEmployeeList);
+        ReflectionTestUtils.setField(employeeController, "repository", mockRepository);
     }
     @Test
     public void testGetEmployeeById() {
+        when(mockRepository.getById("123")).thenReturn(testEmployee);
+
         Employee employee = employeeController.getEmployeeById(employeeID);
 
         Assert.assertEquals(firstName, employee.getFirstName());
 
     }
 
-    @Test
+    @Test(expected=ResourceNotFoundException.class)
     public void testGetEmployeeById_EmployeeNotFound() {
         Employee employee = employeeController.getEmployeeById(employeeIDNotFound);
 
-        Assert.assertNull(employee);
-
     }
 
-    @Test
-    public void testDeleteEmployeeByID(){
 
-        int numRecords = employeeList.size();
-        Employee deletedEmployee = employeeController.deleteEmployeeByID(employeeID);
-        Assert.assertEquals(employeeID,deletedEmployee.getEmployeeID());
-        Assert.assertEquals(numRecords - 1, employeeList.size());
-
-    }
-    @Test
-    public void testDeleteEmployeeByID_NotFound(){
-
-        Employee deletedEmployee = employeeController.deleteEmployeeByID(employeeIDNotFound);
-        Assert.assertNull(deletedEmployee);
-
-    }
-
-    @Test
-    public void testGetEmployeesByMentorID(){
-        Collection<Employee> mentees = employeeController.getEmployeesByMentorID(mentorID);
-
-    }
 
 }

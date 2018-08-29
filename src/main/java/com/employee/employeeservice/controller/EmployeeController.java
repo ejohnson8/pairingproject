@@ -29,7 +29,7 @@ public class EmployeeController {
         }
     }
 
-    @RequestMapping(value = "/{ids}", method = RequestMethod.GET)
+    @RequestMapping(value = "/getAll/{ids}", method = RequestMethod.GET)
     @ResponseBody
     public List<Employee> getAllEmployeesByIds(@PathVariable("ids") List<String> ids) {
         List<Employee> employees = repository.getAllById(ids);

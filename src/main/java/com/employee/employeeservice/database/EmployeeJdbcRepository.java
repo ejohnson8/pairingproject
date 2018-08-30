@@ -17,10 +17,11 @@ public class EmployeeJdbcRepository {
     @Autowired
     NamedParameterJdbcTemplate template;
 
+    @Autowired
+    JdbcTemplate jdbcTemplate;
+
     public Employee getById(String id) {
-        MapSqlParameterSource parameters = new MapSqlParameterSource();
-        parameters.addValue("id", id);
-        return template.queryForObject("select * from employee where employeeID=?", parameters, new BeanPropertyRowMapper< Employee >(Employee.class));
+        return jdbcTemplate.queryForObject("select * from employee where employeeID=?", new Object[] {id}, new BeanPropertyRowMapper< Employee >(Employee.class));
     }
 
     public List<Employee> getAllById(List<String> ids) {

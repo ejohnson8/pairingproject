@@ -33,7 +33,7 @@ public class EmployeeController {
     @ResponseBody
     public List<Employee> getAllEmployeesByIds(@PathVariable("ids") List<String> ids) {
         List<Employee> employees = repository.getAllById(ids);
-        if(employees != null) {
+        if (employees != null) {
             return employees;
         } else {
             throw new ResourceNotFoundException();

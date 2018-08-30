@@ -30,7 +30,6 @@ repositories {
     mavenCentral()
 }
 
-
 dependencies {
     compile('org.springframework.boot:spring-boot-starter-web')
     compile('org.springframework.boot:spring-boot-starter-jdbc')
@@ -38,7 +37,9 @@ dependencies {
     compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.8.0'
     compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.8.0'
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-eureka-client', version: '2.0.1.RELEASE'
-    compile('org.springframework.boot:spring-boot-devtools')
+    compile (group: 'io.pivotal.spring.cloud', name: 'spring-cloud-services-starter-config-client', version: '2.0.1.RELEASE') {
+        transitive = false
+    }
     compile('org.springframework.boot:spring-boot-devtools')
     testCompile('org.springframework.boot:spring-boot-starter-test')
 }
